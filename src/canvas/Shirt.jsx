@@ -12,8 +12,12 @@ function Shirt() {
 
     const logoTexture = useTexture(store.logoDecal)
     const fullTexture = useTexture(store.fullDecal)
+    const stateString = JSON.stringify(store)
+    useFrame((state, delta) => easing.dampC(materials.lambert1.color, store.color, 0.25, delta))
     return (
-        <group>
+        <group
+            key={store}
+        >
             <mesh
                 castShadow
                 geometry={nodes.T_Shirt_male.geometry}
@@ -21,6 +25,21 @@ function Shirt() {
                 material-roughness={1}
                 dispose={null}
             >
+                {store.isFullTexture && (
+                    <Decal position={[0, 0, 0]}
+                        rotation={[0, 0, 0]}
+                        scale={1}
+                        map={fullTexture} />
+                )}
+                {store.isLogoTexture && (
+                    <Decal position={[0, 0.04, 0.15]}
+                        rotation={[0, 0, 0]}
+                        scale={0.15}
+                        map={logoTexture}
+                        depthTest={false}
+                        depthWrite={true}
+                    />
+                )}
             </mesh>
         </group>
     )
